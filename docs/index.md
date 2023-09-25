@@ -1,6 +1,6 @@
 # Jira reports
 
-Jira automation is run on a schedule every weekday at 08:45. This include the following jobs:
+Jira reports is run on a schedule every weekday at 08:45. This include the following jobs:
 
 * archive
 * service_desk
