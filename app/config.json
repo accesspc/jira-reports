@@ -1,0 +1,121 @@
+{
+    "audit": {
+        "confluence": false,
+        "date_format": "%Y-%m-%d %H:%M:%S",
+        "inactive_days": 30
+    },
+    "confluence": {
+        "url": "https://confluence.local"
+    },
+    "core": {
+        "projects": [
+            "BitBucket",
+            "Confluence",
+            "Jira",
+            "Trello"
+        ]
+    },
+    "jira": {
+        "archive": {
+            "days": 365,
+            "exclude_projects": [
+                "Personal",
+                "Private"
+            ],
+            "statuses": [
+                "Closed",
+                "Done",
+                "Resolved"
+            ]
+        },
+        "custom_fields": {
+            "ttfr": {
+                "description": "Time to First Response",
+                "field": "customfield_10441"
+            },
+            "ttr": {
+                "description": "Time to Resolution",
+                "field": "customfield_10440"
+            },
+            "ttcar": {
+                "description": "Time to Close after Resolution",
+                "field": "customfield_10442"
+            }
+        },
+        "start_year": 2021,
+        "url": "https://jira.local"
+    },
+    "queries": {
+        "components": [
+            {
+                "extra": "AND component = 'Confluence'",
+                "label": "Confluence"
+            }, {
+                "extra": "AND component = 'Github'",
+                "label": "Github"
+            }, {
+                "extra": "AND component = 'Gitlab'",
+                "label": "Gitlab"
+            }, {
+                "extra": "AND component = 'Grafana'",
+                "label": "Grafana"
+            }, {
+                "extra": "AND component in (Jira, ServiceDesk)",
+                "label": "Jira"
+            }, {
+                "extra": "AND component = 'Trello'",
+                "label": "Trello"
+            }
+        ],
+        "live": [
+            {
+                "extra": "AND 'Value Stream' = Core AND component != live",
+                "label": "Other issues",
+                "project": "Service Desk"
+            }, {
+                "extra": "AND 'Value Stream' = Core AND component = live",
+                "label": "Live incidents",
+                "project": "Service Desk"
+            }
+        ],
+        "sd": {
+            "extra": "AND 'Value Stream' = Core",
+            "label": "Service Desk",
+            "project": "Service Desk"
+        },
+        "types": [
+            {
+                "extra": "AND issuetype = 'Bug'",
+                "label": "Bugs resolved"
+            }, {
+                "extra": "AND issuetype = 'Technical Debt'",
+                "label": "Technical Debt"
+            }, {
+                "extra": "AND issuetype = 'Upgrade/Patch'",
+                "label": "Upgrades"
+            }, {
+                "extra": "AND issuetype not in ('Bug', 'Technical Debt', 'Upgrade/Patch')",
+                "label": "Service Improvements"
+            }
+        ],
+        "teams": [
+            {
+                "extra": "",
+                "label": "Bitbucket",
+                "project": "Bitbucket"
+            }, {
+                "extra": "",
+                "label": "Confluence",
+                "project": "Confluence"
+            }, {
+                "extra": "",
+                "label": "Jira",
+                "project": "Jira"
+            }, {
+                "extra": "",
+                "label": "Trello",
+                "project": "Trello"
+            }
+        ]
+    }
+}

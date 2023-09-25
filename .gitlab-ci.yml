@@ -1,0 +1,120 @@
+---
+include:
+  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+  - template: Jobs/SAST-IaC.latest.gitlab-ci.yml
+  - template: Jobs/SAST.latest.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
+
+default:
+  tags:
+    - runner
+
+stages:
+  - build
+  - test
+  - run
+  - deploy
+  - manual
+
+variables:
+  SAST_EXCLUDED_PATHS: spec, test, tests, tmp, Dockerfile, docker-compose.yml
+
+# .app
+.app:
+  image: python:3
+  before_script:
+    - pip3 install --no-cache-dir -r requirements.txt
+  variables:
+    REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+
+# Stage: build
+changelog:
+  stage: build
+  extends:
+    - .conventional-changelog
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+pages:build:
+  stage: build
+  extends:
+    - .docs-build
+
+# Stage: test
+kics-iac-sast:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# Stage: run
+app:archive:dryrun:
+  stage: run
+  extends:
+    - .app
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - python3 app/main.py $TOKENS archive --dry-run
+
+app:archive:
+  stage: run
+  extends:
+    - .app
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - python3 app/main.py $TOKENS archive --no-dry-run
+
+app:service_desk:
+  stage: run
+  artifacts:
+    paths:
+      - docs/data/*.json
+  extends:
+    - .app
+  script:
+    - python3 app/main.py $TOKENS service_desk
+
+app:user_report:
+  stage: run
+  artifacts:
+    paths:
+      - users_report.csv
+  extends:
+    - .app
+  script:
+    - python3 app/main.py $TOKENS user_report
+
+app:user_report:including_confluence:
+  stage: run
+  allow_failure: true
+  artifacts:
+    paths:
+      - users_report.csv
+  extends:
+    - .app
+  rules:
+    - when: manual
+  script:
+    - python3 app/main.py $TOKENS user_report --include-confluence
+
+# Stage: deploy
+pages:
+  stage: deploy
+  extends:
+    - .docs-deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+release:
+  stage: deploy
+  extends:
+    - .gitlab-release
+  needs:
+    - job: changelog
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"

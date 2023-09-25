@@ -1,0 +1,8 @@
+{
+    "confluence": {
+        "token": "CONFLUENCE_TOKEN"
+    },
+    "jira": {
+        "token": "JIRA_TOKEN"
+    }
+}

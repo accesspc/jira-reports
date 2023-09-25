@@ -1,0 +1,8 @@
+**/*.tmp
+__pycache__/
+*.py[cod]
+*$py.class
+**/*.pyc
+app/tokens.json
+docs/data/*.json
+users_report.csv

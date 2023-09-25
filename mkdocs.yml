@@ -1,0 +1,30 @@
+---
+site_name: Jira reports
+site_url: https://pages.gitlab.com/jira-reports
+site_dir: public
+
+repo_name: jira-reports
+repo_url: https://gitlab.com/jira-reports
+
+theme:
+  name: material
+  palette:
+    primary: black
+  features:
+    - navigation.sections
+  icon:
+    repo: fontawesome/brands/gitlab
+
+plugins:
+  - macros
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.superfences
+
+extra:
+  homepage: /jira-reports/

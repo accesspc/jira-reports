@@ -1,0 +1,4 @@
+deepmerge
+numpy
+pandas
+requests
