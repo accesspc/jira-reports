@@ -1,4 +1,3 @@
 deepmerge
-numpy
 pandas
 requests
