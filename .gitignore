@@ -1,3 +1,6 @@
+# sonar scanner
+.scannerwork
+
 **/*.tmp
 __pycache__/
 *.py[cod]
